@@ -45,3 +45,16 @@ def run_simulation():
 
     # Step 1: Bob checks out the book
     print("--- Step 1: Bob checks out the book ---")
+    my_library.lending_service.checkout_book(member=bob, book_item=hp_copy_1)
+    print("")
+    # Step 2: Alice tries to reserve the book
+    print("--- Step 2: Alice tries to reserve the book ---")
+    my_library.reservation_service.make_reservation(member=alice, book=hp_copy_1.book)
+    print("")
+    # Step 3: Bob returns the book late
+    print("--- Step 3: Bob returns the book late ---")
+    # Simulate late return by manipulating due_date
+    hp_copy_1.due_date = datetime.now().replace(year=datetime.now().year - 1)  # Set due date to last year
+    my_library.lending_service.return_book(member=bob, book_item=hp_copy_1)
+    print("")
+    # --- SCENARIO END ---  
