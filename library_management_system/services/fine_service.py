@@ -1,5 +1,5 @@
 from datetime import datetime
-from ..models.book import BookItem
+from models.book import BookItem
 
 class FineService:
     def calculate_fine(self, book_item: BookItem, days_overdue: int) -> float:
