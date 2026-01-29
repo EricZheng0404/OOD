@@ -1,8 +1,8 @@
 """
 db_cache.py 
-Implementation of database cache system.
+A sycnchronous implementaionn of database cache system.
 ====================================================================
-This implementation employs a synchronous cleanup job.
+This implementation employs a synchronous cleanup job:
 delete_expired() function will clean up any expired key-value in the databse 
 before any user-accessible operations.
 
@@ -19,7 +19,8 @@ class DB_Cache:
         # A dictionary to store key: (value, expiration_time) pairs
         self.dictionary: dict[int, tuple[int, float]] = {}
 
-    def delete_expired(self):
+    def _delete_expired(self):
+        """This is a private function"""
         curr_time = time.time()
         while self.heap and self.heap[0][0] <= curr_time:
             expiration_time, key, value = heapq.heappop(self.heap)
@@ -31,7 +32,7 @@ class DB_Cache:
                 del self.dictionary[key]
 
     def put(self, key, value, ttl):
-        self.delete_expired()
+        self._delete_expired()
         expiration_time = time.time() + ttl
         # Update the dictionary
         self.dictionary[key] = (value, expiration_time)
@@ -43,13 +44,13 @@ class DB_Cache:
         return key in self.dictionary
     
     def get(self, key):
-        self.delete_expired()
+        self._delete_expired()
         if not self.check_valid_key(key):
             raise KeyError("{key} not found")
         return self.dictionary[key][0]
     
     def delete(self, key):
-        self.delete_expired()
+        self._delete_expired()
         if not self.check_valid_key(key):
             raise KeyError("{key} not found")
         # We technically don't need to remove the key from the heap because it
@@ -57,6 +58,6 @@ class DB_Cache:
         del self.dictionary[key]
 
     def contains(self, key):
-        self.delete_expired()
+        self._delete_expired()
         return self.check_valid_key(key)
 
