@@ -1,11 +1,23 @@
+"""
+db_cache.py 
+Implementation of database cache system.
+====================================================================
+This implementation employs a synchronous cleanup job.
+delete_expired() function will clean up any expired key-value in the databse 
+before any user-accessible operations.
+
+"""
+
+
 import heapq
 import time
+
 class DB_Cache:
     def __init__(self):
         # A heap of (expiration_time, key, value) pairs
-        self.heap = []
+        self.heap: list[tuple[int, int, int]] = []
         # A dictionary to store key: (value, expiration_time) pairs
-        self.dictionary = {}
+        self.dictionary: dict[int, tuple[int, float]] = {}
 
     def delete_expired(self):
         curr_time = time.time()

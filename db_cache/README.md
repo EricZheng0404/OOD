@@ -1,9 +1,6 @@
 # Key Features
-1. We save (expiration_time, key, value) in the heap so that when users update the dictionary and new tuples are updated to the help, we won't delete the not-expired keys. We make sure that key-value matches
-
-dictionary = {1: (1, 3), 1: (3, 10)}
-heap = [(1, 1, 3), (1, 3, 10)] 
-- TODO: Potential bug when we have the same key and the same value but different TTL.
+1. We store (expiration_time, key, value) tuples in the heap. When updating the dictionary, we validate that heap entries match dictionary entries before deletion, preventing premature removal of updated keys.
+2. As an alternative, We could also implement an `entry_id` so that every single entry could have their own unique id so that we won't delete the unmatching ids.
 
 
 # Threads
@@ -17,3 +14,4 @@ heap = [(1, 1, 3), (1, 3, 10)]
 
 ![alt text](image.png)
 executors for the callback?
+
