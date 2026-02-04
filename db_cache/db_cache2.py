@@ -63,10 +63,15 @@ class DB_Cache:
         return key in self.dictionary
     
     def get(self, key):
+        now = time.time()
         with self.lock:
             if not self.check_valid_key(key):
                 raise KeyError("{key} not found")
-            return self.dictionary[key][0]
+            value, expiration_time = self.dictionary[key]
+            if expiration_time <= now:
+                del self.dictionary[key]
+                raise KeyError("{key} not found")
+            return value
     
     def delete(self, key):
         with self.lock:
