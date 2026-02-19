@@ -49,10 +49,9 @@ class ParkingManager:
         if not parking_spot:
             raise Exception("No available spot")
         is_occupied = parking_spot._is_occupied
-        if not is_occupied:
+        if is_occupied:
             raise Exception("The spot already occupied")
-        parking_spot._is_occupied = True
-        parking_spot.parked_vehicle = vehicle
+        parking_spot.park_vehicle(vehicle)
         self.vehicle_locations[vehicle] = parking_spot
         ticket = ParkingTicket(vehicle, datetime.now())
         self.tickets[vehicle] = ticket
@@ -61,8 +60,7 @@ class ParkingManager:
     
     def unpark_vehicle(self, vehicle: Vehicle) -> float:
         parking_spot = self.vehicle_locations[vehicle]
-        parking_spot._is_occupied = False
-        parking_spot.parked_vehicle = None
+        parking_spot.unpark(vehicle)
         del self.vehicle_locations[vehicle]
         ticket = self.tickets[vehicle]
         del self.tickets[vehicle]
