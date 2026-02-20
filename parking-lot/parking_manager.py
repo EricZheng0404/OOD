@@ -4,14 +4,13 @@ Parking Manager clas
 from typing import Optional
 from parking_spot import ParkingSpot
 from vehicle import Vehicle, VehicleSize
-from parking_ticket import ParkingTicket
+from parking_ticket import FlatRate, ParkingTicket
 from collections import defaultdict, deque
-from datetime import datetime
-from parking_ticket import ParkingTicket
+import time
 
 class ParkingManager:
     def __init__(self, spot_config: Optional[dict[VehicleSize, int]] = None):
-        # VehicleS -> [ParkingSpot]
+        # VehicleSize -> [ParkingSpot]
         self.parking_spots = defaultdict(deque)
         # Vehicle -> ParkingSpot
         self.vehicle_locations: dict[Vehicle, ParkingSpot] = {}
@@ -53,18 +52,22 @@ class ParkingManager:
             raise Exception("The spot already occupied")
         parking_spot.park_vehicle(vehicle)
         self.vehicle_locations[vehicle] = parking_spot
-        ticket = ParkingTicket(vehicle, datetime.now())
+        ticket = ParkingTicket(vehicle, time.time(), FlatRate(5.0))
         self.tickets[vehicle] = ticket
         return ticket
 
-    
     def unpark_vehicle(self, vehicle: Vehicle) -> float:
         parking_spot = self.vehicle_locations[vehicle]
         parking_spot.unpark(vehicle)
         del self.vehicle_locations[vehicle]
         ticket = self.tickets[vehicle]
         del self.tickets[vehicle]
-        return ticket.calculate_fare()
+        return ticket.calculate_ticket_fare()
+    
+    def get_available_spots(self, vehicle_size: VehicleSize) -> int:
+        return len(self.parking_spots[vehicle_size])
+    
+
         
     
 

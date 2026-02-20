@@ -22,7 +22,6 @@ class ParkingSpot:
     def is_occupied(self):
         return self._is_occupied
     
-
     def park_vehicle(self, vehicle: Vehicle):
         """Park a vehicle in this spot."""
         if self._is_occupied:
@@ -40,5 +39,5 @@ class ParkingSpot:
         self._is_occupied = False
 
     def __repr__(self) -> str:
-        status = "occupied" if not self.is_occupied else "available"
+        status = "occupied" if self.is_occupied else "available"
         return f"{self._spot_id}, size: {self.size}. status: {status}"
