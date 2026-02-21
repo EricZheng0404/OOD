@@ -36,7 +36,8 @@ This repository contains various OOD practice implementations to strengthen unde
 
 | Project | Description |
 |---------|-------------|
-| [Library Management System](library_management_system/) | A complete library system with catalog, lending, reservations, and notifications |
+| [Library Management System](library-management-system/) | A complete library system with catalog, lending, reservations, and notifications |
+| [Parking Lot](parking-lot/) | A multi-level parking lot management system with vehicle tracking and spot allocation |
 
 
 
